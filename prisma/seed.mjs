@@ -44,8 +44,9 @@ async function seed() {
   const index = await prisma.index.create({
     data: {
       title: "Index",
-      content: `This is the index page
-Nothing to see here :)`.trim(),
+      content: `If you see this hero section, you have successfully installed the template.
+This is comming from prisma schema and the data is being fetched from the database.
+Make sure to edit the schema and add your own data using the seed script!`.trim(),
     },
   });
   const about = await prisma.about.create({
