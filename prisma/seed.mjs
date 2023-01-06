@@ -4,43 +4,21 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function seed() {
-  const email = "admin@ravelaso.com";
+  const email = "admin@admin.com";
 
   // cleanup the existing database
   await prisma.user.delete({ where: { email } }).catch(() => {
     // no worries if it doesn't exist yet
   });
-
-  const hashedPassword = await bcrypt.hash("12341234", 12);
+  // Will hass the password: 1234abc (use your own)
+  const hashedPassword = await bcrypt.hash("1234abc", 12);
 
   const user = await prisma.user.create({
     data: {
       email:email,password:hashedPassword
     },
   });
-  const work1 = await prisma.work.create({
-    data: {
-      title: "work1",
-      path: "work-1",
-      content: "work 1 content",
-      
-    },
-  });
-  const work2 = await prisma.work.create({
-    data: {
-      title: "work2",
-      path: "work-2",
-      content: "work 2 content",
-      
-    },
-  });
-  const work3 = await prisma.work.create({
-    data: {
-      title: "work3",
-      content: "work 3 content",
-      path: "work-3",
-    },
-  });
+  // Seeding the index page
   const index = await prisma.index.create({
     data: {
       title: "Index",
@@ -49,14 +27,8 @@ This is comming from prisma schema and the data is being fetched from the databa
 Make sure to edit the schema and add your own data using the seed script!`.trim(),
     },
   });
-  const about = await prisma.about.create({
-    data: {
-      title: "About",
-      content: `This is the about page
-Nothing to see here :)`.trim(),
-    },
-  });
-  console.log(`Database has been seeded. 🌱`);
+  
+console.log(`Database has been seeded. 🌱`);
 }
 
 seed()
