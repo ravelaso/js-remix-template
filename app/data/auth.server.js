@@ -9,7 +9,7 @@ const sessionStorage = createCookieSessionStorage({
     secure: process.env.NODE_ENV === "production",
     secrets: [SESSION_SECRET],
     sameSite: "lax",
-    maxAge: 30 * 24 * 60 * 1, // 30days
+    maxAge: 1 * 24 * 60 * 60, // 1 day 
     httpOnly: true,
   },
 });
@@ -24,16 +24,7 @@ async function createUserSession(userId, redirectPath) {
   });
 }
 
-export async function getUserFromSession(request) {
-  const session = await sessionStorage.getSession(
-    request.headers.get("Cookie")
-  );
-  const userId = session.get("userId");
-  if (!userId) {
-    return null;
-  }
-  return userId;
-}
+
 
 export async function destroyUserSession(request) {
   const session = await sessionStorage.getSession(
@@ -51,10 +42,22 @@ export async function getUserDetails(userId) {
   return user;
 }
 
-export async function requireUserSession(request) {
-  const userId = await getUserFromSession(request);
+export async function getUserFromSession(request) {
+  const session = await sessionStorage.getSession(
+    request.headers.get("Cookie")
+  );
+  const userId = session.get("userId");
   if (!userId) {
     throw redirect("/auth");
+  }
+  return userId;
+}
+
+export async function requireUserSession(request) {
+  const userId = await getUserFromSession(request);
+  console.log("userId", userId);
+  if (!userId) {
+    throw new Error("User not logged in");
   }
   return userId;
 }

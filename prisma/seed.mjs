@@ -10,25 +10,52 @@ async function seed() {
   await prisma.user.delete({ where: { email } }).catch(() => {
     // no worries if it doesn't exist yet
   });
-  // Will hass the password: 1234abc (use your own)
-  const hashedPassword = await bcrypt.hash("1234abc", 12);
+
+  const hashedPassword = await bcrypt.hash("12341234", 12);
 
   const user = await prisma.user.create({
     data: {
       email:email,password:hashedPassword
     },
   });
-  // Seeding the index page
+  const work1 = await prisma.work.create({
+    data: {
+      title: "work1",
+      path: "work-1",
+      content: "work 1 content",
+      
+    },
+  });
+  const work2 = await prisma.work.create({
+    data: {
+      title: "work2",
+      path: "work-2",
+      content: "work 2 content",
+      
+    },
+  });
+  const work3 = await prisma.work.create({
+    data: {
+      title: "work3",
+      content: "work 3 content",
+      path: "work-3",
+    },
+  });
   const index = await prisma.index.create({
     data: {
       title: "Index",
-      content: `If you see this hero section, you have successfully installed the template.
-This is comming from prisma schema and the data is being fetched from the database.
-Make sure to edit the schema and add your own data using the seed script!`.trim(),
+      content: `### This is the index page
+## Nothing to see here :)`.trim(),
     },
   });
-  
-console.log(`Database has been seeded. 🌱`);
+  const about = await prisma.about.create({
+    data: {
+      title: "About",
+      content: `### This is the about page
+## Nothing to see here :)`.trim(),
+    },
+  });
+  console.log(`Database has been seeded. 🌱`);
 }
 
 seed()
